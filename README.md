@@ -1,6 +1,8 @@
 Splash-3 Benchmark Suite
 ========================
 
+This version contain some special function in hooks.c file which are used to define the ROI.
+
 Splash-3 is a benchmark suite based on Splash-2 but without data races. It was
 first presented at [ISPASS'16](http://ieeexplore.ieee.org/abstract/document/7482078/).
 
