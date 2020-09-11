@@ -1,0 +1,61 @@
+#include "hooks.h"
+#include "config.h"
+#include <stdio.h>
+#include <assert.h>
+#if ENABLE_TIMING
+#include <sys/time.h>
+/** \brief Time at beginning of execution of Region-of-Interest.
+ *
+ * This variable will store the time when the Region-of-Interest is entered.
+ * time_begin and time_end allow an accurate measurement of the execution time
+ * of the benchmark.
+ *
+ * Time measurement can be enabled in file config.h.
+ */
+static double time_begin;
+/** \brief Time at end of execution of Region-of-Interest.
+ *
+ * This variable will store the time when the Region-of-Interest is left.
+ * time_begin and time_end allow an accurate measurement of the execution time
+ * of the benchmark.
+ *
+ * Time measurement can be enabled in file config.h.
+ */
+static double time_end;
+#endif //ENABLE_TIMING
+
+__attribute__ ((noinline)) void RMS_Initialization_Done() { __asm volatile("nop"); };
+__attribute__ ((noinline)) void RMS_Start_Transaction() { __asm volatile("nop"); };
+__attribute__ ((noinline)) void RMS_End_Transaction() { __asm volatile("nop"); };
+
+__attribute__ ((noinline)) void RMS_Initial_Acq(void* lock) { __asm volatile("nop"); };
+//__attribute__ ((noinline)) void RMS_Initial_Acq(int lock_int) { __asm volatile("nop"); };
+__attribute__ ((noinline)) void RMS_Final_Acq() { __asm volatile("nop"); };
+__attribute__ ((noinline)) void RMS_Initial_Release(void* lock) { __asm volatile("nop"); };
+//__attribute__ ((noinline)) void RMS_Final_Release(int lock_int) { __asm volatile("nop"); };
+__attribute__ ((noinline)) void RMS_Final_Release() { __asm volatile("nop"); };
+
+__attribute__ ((noinline)) void RMS_Initial_Barrier(void* cond, void* count, void* lock) { __asm volatile("nop"); };
+__attribute__ ((noinline)) void RMS_Final_Barrier() { __asm volatile("nop"); };
+
+__attribute__ ((noinline)) void RMS_Initial_CondSignal(void* cond) { __asm volatile("nop"); };
+__attribute__ ((noinline)) void RMS_Final_CondSignal() { __asm volatile("nop"); };
+__attribute__ ((noinline)) void RMS_Initial_CondBroadcast(void* cond) { __asm volatile("nop"); };
+__attribute__ ((noinline)) void RMS_Final_CondBroadcast() { __asm volatile("nop"); };
+__attribute__ ((noinline)) void RMS_Initial_CondWait(void* cond, void* lock) { __asm volatile("nop"); };
+__attribute__ ((noinline)) void RMS_Final_CondWait() { __asm volatile("nop"); };
+
+__attribute__ ((noinline)) void RMS_Initial_Atomic_Acq(void *addr, int size) { __asm volatile("nop"); };
+__attribute__ ((noinline)) void RMS_Final_Atomic_Acq() { __asm volatile("nop"); };
+__attribute__ ((noinline)) void RMS_Initial_Atomic_Release(void *addr, int size) { __asm volatile("nop"); };
+__attribute__ ((noinline)) void RMS_Final_Atomic_Release() { __asm volatile("nop"); };
+__attribute__ ((noinline)) void RMS_Initial_Atomic_AcqRel(void *addr, int size) { __asm volatile("nop"); };
+__attribute__ ((noinline)) void RMS_Final_Atomic_AcqRel() { __asm volatile("nop"); };
+
+__attribute__ ((noinline)) void RMS_Fence(int type) { __asm volatile("nop"); };
+
+__attribute__ ((noinline)) void RMS_Begin_FSID() { __asm volatile("nop"); };
+__attribute__ ((noinline)) void RMS_End_FSID() { __asm volatile("nop"); };
+
+__attribute__ ((noinline)) void RMS_Begin_Parallel() { __asm volatile("nop"); };
+__attribute__ ((noinline)) void RMS_End_Parallel() { __asm volatile("nop"); };

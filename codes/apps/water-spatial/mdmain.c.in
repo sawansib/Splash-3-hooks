@@ -14,6 +14,8 @@
 /*                                                                       */
 /*************************************************************************/
 
+#include <hooks.h>
+
 EXTERN_ENV
 
 #include <stdio.h>
@@ -41,6 +43,8 @@ double MDMAIN(long NSTEP, long NPRINT, long NSAVE, long NORD1, long ProcID)
     double XVIR,AVGT,TEN;
     struct list_of_boxes *new_box, *curr_box;
 
+    RMS_Initialization_Done();
+    
     for (i=start_end[ProcID]->box[XDIR][FIRST]; i<=start_end[ProcID]->box[XDIR][LAST]; i++) {
         for (j=start_end[ProcID]->box[YDIR][FIRST]; j<=start_end[ProcID]->box[YDIR][LAST]; j++) {
             for (k=start_end[ProcID]->box[ZDIR][FIRST]; k<=start_end[ProcID]->box[ZDIR][LAST]; k++) {
@@ -80,6 +84,10 @@ double MDMAIN(long NSTEP, long NPRINT, long NSAVE, long NORD1, long ProcID)
            cold-start effects.  Recommended to do this at the beginning of the
            second timestep; i.e. if (i == 2).
            */
+
+	if (ProcID == 0 && i == 2) {
+          RMS_Start_Transaction();
+        }
 
         /* initialize various shared sums */
         if (ProcID == 0) {
@@ -187,7 +195,7 @@ double MDMAIN(long NSTEP, long NPRINT, long NSAVE, long NORD1, long ProcID)
         }
 
     } /* for i */
-
+    RMS_End_Transaction();
     return(XTT);
 
 } /* mdmain.c */

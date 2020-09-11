@@ -1,5 +1,5 @@
 TARGET = BARNES
-OBJS = code.o code_io.o load.o grav.o getparam.o util.o
+OBJS = code.o code_io.o load.o grav.o getparam.o util.o hooks.o
 
 include ../../Makefile.config
 
@@ -10,4 +10,4 @@ getparam.o: getparam.c.in stdinc.h
 grav.o: grav.c.in stdinc.h
 load.o: load.c.in stdinc.h
 util.o: util.c.in stdinc.h
-
+hooks.o: hooks.c hooks.h

@@ -2,7 +2,7 @@ TARGET = RAYTRACE
 
 OBJS = bbox.o cr.o env.o fbuf.o geo.o huprn.o husetup.o hutv.o isect.o \
 	main.o matrix.o memory.o poly.o raystack.o shade.o sph.o trace.o \
-	tri.o workpool.o
+	tri.o workpool.o hooks.o
 
 include ../../Makefile.config
 
@@ -25,4 +25,5 @@ sph.c:	sph.c.in rt.h
 trace.c: trace.c.in rt.h
 tri.c:	tri.c.in rt.h
 workpool.c: workpool.c.in rt.h
+hooks.o: hooks.c hooks.h
 

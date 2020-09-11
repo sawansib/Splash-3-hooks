@@ -42,6 +42,7 @@
 /*  Note: This version works under both the FORK and SPROC models        */
 /*                                                                       */
 /*************************************************************************/
+#include <hooks.h>
 
 #include <stdio.h>
 #include <math.h>
@@ -440,6 +441,9 @@ void SlaveStart()
 /* POSSIBLE ENHANCEMENT:  Here is where one might pin processes to
    processors to avoid migration */
 
+    RMS_Initialization_Done();
+
+  
   BARRIER(Global->start, P);
 
   upriv = (double *) malloc(2*(rootN-1)*sizeof(double));  
@@ -461,6 +465,11 @@ void SlaveStart()
 /* POSSIBLE ENHANCEMENT:  Here is where one might reset the
    statistics that one is measuring about the parallel execution */
 
+  if (MyNum == 0) {
+    RMS_Start_Transaction();
+  }
+
+  
   if ((MyNum == 0) || (dostats)) {
     CLOCK(initdone);
   }
@@ -484,6 +493,8 @@ void SlaveStart()
     Global->finishtime = finish;
     Global->initdonetime = initdone;
   }
+    RMS_End_Transaction();
+
 }
 
 

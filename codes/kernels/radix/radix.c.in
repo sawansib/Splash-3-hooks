@@ -35,7 +35,8 @@
 /*  Note: This version works under both the FORK and SPROC models        */
 /*                                                                       */
 /*************************************************************************/
-
+#include <hooks.h>
+#include <hooks.h>
 #include <stdio.h>
 #include <math.h>
 #include <unistd.h>
@@ -440,6 +441,8 @@ void slave_sort()
 /* POSSIBLE ENHANCEMENT:  Here is where one might pin processes to
    processors to avoid migration */
 
+   RMS_Initialization_Done();
+     
    key_density = (long *) G_MALLOC(radix*sizeof(long));
 
    /* Fill the random-number array. */
@@ -477,6 +480,10 @@ void slave_sort()
 
      if ((MyNum == 0) || (stats)) {
        CLOCK(time2)
+     }
+
+     if (MyNum == 0 && loopnum == 1) {
+       RMS_Start_Transaction();
      }
 
      for (i = 0; i < radix; i++) {
@@ -641,6 +648,9 @@ void slave_sort()
      global->final = to;
    }
 
+      RMS_End_Transaction();
+
+   
 }
 
 /*

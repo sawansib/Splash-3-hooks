@@ -15,7 +15,7 @@
 /*************************************************************************/
 
 EXTERN_ENV
-
+#include <hooks.h>
 #include "matrix.h"
 #define HashNum 1024
 #define Bucket(desti, destj, src) ((desti+destj+src)%HashNum)

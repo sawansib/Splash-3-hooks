@@ -14,7 +14,9 @@
 /*                                                                       */
 /*************************************************************************/
 
+
 EXTERN_ENV
+#include <hooks.h>
 #include "stdio.h"
 #include "parameters.h"
 #include "mdvar.h"
@@ -37,6 +39,9 @@ double MDMAIN(long NSTEP, long NPRINT, long NSAVE, long NORD1, long ProcID)
     double XVIR,AVGT,TEN;
     double TTMV = 0.0, TKIN = 0.0, TVIR = 0.0;
 
+        RMS_Initialization_Done();
+
+    
     /*.......ESTIMATE ACCELERATION FROM F/M */
     INTRAF(&gl->VIR,ProcID);
 
@@ -58,6 +63,10 @@ double MDMAIN(long NSTEP, long NPRINT, long NSAVE, long NORD1, long ProcID)
            second timestep; i.e. if (i == 2).
            */
 
+	if (ProcID == 0 && i == 2) {
+          RMS_Start_Transaction();
+        }
+	
         /* initialize various shared sums */
         if (ProcID == 0) {
             long dir;
@@ -163,6 +172,8 @@ double MDMAIN(long NSTEP, long NPRINT, long NSAVE, long NORD1, long ProcID)
             gl->tracktime += gl->trackend - gl->trackstart;
         }
     } /* for i */
+
+    RMS_End_Transaction();
 
     return(XTT);
 

@@ -83,7 +83,7 @@
 #include <stdio.h>
 #include <math.h>
 #include "rt.h"
-
+#include <hooks.h>
 
 CHAR	*ProgName     = "RAYTRACE";          /* The program name.                 */
 INT	nprocs	      = 1;		/* The number of processors to use.  */
@@ -195,6 +195,9 @@ VOID	StartRayTrace()
 	/* POSSIBLE ENHANCEMENT: Here's where one might lock processes down
 	to processors if need be */
 
+	RMS_Initialization_Done();
+
+	
 	InitWorkPool(pid);
 	InitRayTreeStack(Display.maxlevel, pid);
 
@@ -210,6 +213,11 @@ VOID	StartRayTrace()
 	/* POSSIBLE ENHANCEMENT:  Here's where one would RESET STATISTICS
 	and TIMING if one wanted to measure only the parallel part */
 
+	  if (pid == 0) {
+          RMS_Start_Transaction();
+        }
+
+	  
 	RayTrace(pid);
 
 
@@ -218,6 +226,8 @@ VOID	StartRayTrace()
           gm->partime[pid] = (end - begin) & 0x7FFFFFFF;
           if (pid == 0) gm->par_start_time = begin;
         }
+	RMS_End_Transaction();
+
 	}
 
 

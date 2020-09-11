@@ -22,6 +22,7 @@
  *
  ***************************************************************/
 
+#include <hooks.h>
 #include <stdio.h>
 #include <string.h>
 #if defined(SGI_GL)
@@ -819,6 +820,7 @@ void radiosity()
 
     /* POSSIBLE ENHANCEMENT:  Here is where one might pin processes to
        processors to avoid migration */
+    RMS_Initialization_Done();
 
     /* POSSIBLE ENHANCEMENT:  Here is where one might reset the
        statistics that one is measuring about the parallel execution */
@@ -827,7 +829,9 @@ void radiosity()
     /* Create the initial tasks */
     init_modeling_tasks(process_id) ;
     process_tasks(process_id) ;
-
+    if (process_id == 0) {
+      RMS_Start_Transaction();
+    }
     /* Gather rays & do BF refinement */
     while( init_ray_tasks(process_id) )
         {
@@ -864,6 +868,8 @@ void radiosity()
         timing[process_id]->vertex_time = vertex_done - vertex_start;
         timing[process_id]->wait_time = vertex_start - refine_done;
     }
+
+    RMS_End_Transaction();
 
 }
 

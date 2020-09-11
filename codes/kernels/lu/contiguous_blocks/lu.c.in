@@ -38,7 +38,7 @@
 /*  Note: This version works under both the FORK and SPROC models        */
 /*                                                                       */
 /*************************************************************************/
-
+#include <hooks.h>
 #include <stdio.h>
 #include <math.h>
 #include <stdlib.h>
@@ -417,8 +417,11 @@ void SlaveStart()
 
 /* POSSIBLE ENHANCEMENT:  Here is where one might pin processes to
    processors to avoid migration */
+  RMS_Initialization_Done();
 
   OneSolve(n, block_size, MyNum, dostats);
+    RMS_End_Transaction();
+
 }
 
 
@@ -450,6 +453,11 @@ void OneSolve(long n, long block_size, long MyNum, long dostats)
 /* POSSIBLE ENHANCEMENT:  Here is where one might reset the
    statistics that one is measuring about the parallel execution */
 
+  if (MyNum == 0) {
+    RMS_Start_Transaction();
+  }
+
+  
   if ((MyNum == 0) || (dostats)) {
     CLOCK(myrs);
   }

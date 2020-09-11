@@ -69,6 +69,7 @@ MAIN_ENV
 
 #define global  /* nada */
 
+#include <hooks.h>
 #include "stdinc.h"
 
 string defv[] = {                 /* DEFAULT PARAMETER VALUES              */
@@ -401,6 +402,9 @@ void SlaveStart()
 /* POSSIBLE ENHANCEMENT:  Here is where one might pin processes to
    processors to avoid migration */
 
+      RMS_Initialization_Done();
+
+   
    /* initialize mybodytabs */
    Local[ProcessId].mybodytab = Local[0].mybodytab + (maxmybody * ProcessId);
    /* note that every process has its own copy   */
@@ -449,6 +453,7 @@ void SlaveStart()
 //      printtree(Global->G_root);
 //      printf("Going to next step!!!\n");
    }
+   RMS_End_Transaction();
 }
 
 
@@ -624,6 +629,9 @@ void stepsystem(long ProcessId)
     if (Local[ProcessId].nstep == 2) {
 /* POSSIBLE ENHANCEMENT:  Here is where one might reset the
    statistics that one is measuring about the parallel execution */
+      if (ProcessId == 0) {
+        RMS_Start_Transaction();
+      }
     }
 
     if ((ProcessId == 0) && (Local[ProcessId].nstep >= 2)) {

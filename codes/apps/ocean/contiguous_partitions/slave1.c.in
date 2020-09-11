@@ -19,7 +19,7 @@
       ****************  */
 
 EXTERN_ENV
-
+#include <hooks.h>
 #include <stdio.h>
 #include <math.h>
 #include <time.h>
@@ -85,6 +85,9 @@ void slave()
 /* POSSIBLE ENHANCEMENT:  Here is where one might pin processes to
    processors to avoid migration. */
 
+        RMS_Initialization_Done();
+
+     
 /* POSSIBLE ENHANCEMENT:  Here is where one might distribute
    data structures across physically distributed memories as
    desired.
@@ -687,6 +690,11 @@ eof(double) +
 	 }
 /* POSSIBLE ENHANCEMENT:  Here is where one might reset the
    statistics that one is measuring about the parallel execution */
+
+	 if (procid == 0) {
+           RMS_Start_Transaction();
+         }
+
        }
 
        slave2(procid,firstrow,lastrow,numrows,firstcol,lastcol,numcols);
@@ -814,5 +822,7 @@ eof(double) +
     CLOCK(t1);
     gp[procid].total_time = t1-gp[procid].total_time;
   }
+    RMS_End_Transaction();
+
 }
 

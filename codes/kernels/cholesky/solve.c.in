@@ -32,7 +32,7 @@
 /*************************************************************************/
 
 MAIN_ENV
-
+#include <hooks.h>
 #include <math.h>
 #include <unistd.h>
 #include "matrix.h"
@@ -328,6 +328,9 @@ void Go()
 /* POSSIBLE ENHANCEMENT:  Here is where one might pin processes to
    processors to avoid migration */
 
+  RMS_Initialization_Done();
+
+    
   lc =(struct LocalCopies *) G_MALLOC(sizeof(struct LocalCopies)+2*PAGE_SIZE,
               			       MyNum)
   lc->freeUpdate = NULL;
@@ -345,6 +348,11 @@ void Go()
 /* POSSIBLE ENHANCEMENT:  Here is where one might reset the
    statistics that one is measuring about the parallel execution */
 
+  if (MyNum == 0) {
+    RMS_Start_Transaction();
+  }
+
+  
   if ((MyNum == 0) || (do_stats)) {
     CLOCK(lc->rs);
   }
@@ -375,6 +383,9 @@ void Go()
 
   BARRIER(Global->start, P);
 
+  RMS_End_Transaction();
+
+  
 }
 
 
